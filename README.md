@@ -3,7 +3,11 @@
 ## Overview
 
 <p align="center">
-  <img src="assets/images/teaser.png" alt="Thalia Studio teaser figure" width="950">
+  <img src="assets/images/demo.gif" alt="Thalia Studio demo" width="950">
+</p>
+
+<p align="center">
+  <a href="assets/videos/demo.mp4">Watch the full demo video</a>
 </p>
 
 Thalia Studio is a rehearsal support system for stand-up comedy. It is designed to support an iterative workflow in which performers draft a bit, record a take, inspect moment-level feedback, revise the material, and try again.
