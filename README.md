@@ -139,26 +139,7 @@ Then open:
 http://127.0.0.1:5000
 ```
 
-## Running without the video dataset
-
-This is the easiest way to try the project.
-
-Use the following setup:
-
-```env
-DATABASE_URL=sqlite:///artifacts/dev.db
-DISABLE_VIDEO_DATASET_INGEST=1
-```
-
-With this configuration:
-
-- The app can boot locally
-- Writing and rehearsal analysis can still run
-- Reference-video retrieval will not be available unless a dataset has already been indexed
-
 ## Enabling reference-video retrieval
-
-Reference retrieval requires **more than just starting the app**. You need to prepare the video data first.
 
 ### Step 1. Obtain a local stand-up video corpus
 
