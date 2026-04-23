@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Performance History</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo-dot"></div>
+        <div>
+          <div class="brand-title">Talkshow Studio</div>
+          <div class="brand-subtitle">Performance History</div>
+        </div>
+      </div>
+      <div class="topbar-controls">
+        <label class="field">
+          <span>Nickname</span>
+          <input id="perfNickname" type="text" placeholder="e.g. Alex" />
+        </label>
+        <label class="field">
+          <span>Drafts</span>
+          <select id="perfDraftSelect"></select>
+        </label>
+        <a href="/" class="btn ghost-btn">Back</a>
+      </div>
+    </header>
+
+    <main class="layout performances-layout">
+      <section class="left">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Performances</h2>
+            <span class="tag">History</span>
+          </div>
+          <ul id="performanceList" class="list"></ul>
+        </div>
+      </section>
+      <section class="center">
+        <div class="panel center-panel">
+          <div class="panel-head">
+            <h2>Details</h2>
+            <span class="tag">Roles & Scores</span>
+          </div>
+          <div id="performanceDetail" class="stage-log"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/static/performances.js"></script>
+  </body>
+</html>

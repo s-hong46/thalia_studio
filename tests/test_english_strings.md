@@ -1,0 +1,1 @@
+- Manual check: all visible text is English

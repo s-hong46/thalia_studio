@@ -1,0 +1,6 @@
+- Manual check: idle 1.5s shows suggestion
+- Manual check: typing hides suggestion
+- Manual check: Enter when idle refreshes suggestion
+- Manual check: Tab accepts suggestion into editor
+- Manual check: drag punchline into editor inserts text
+- Manual check: autosave every 5s

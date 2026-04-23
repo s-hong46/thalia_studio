@@ -1,0 +1,7 @@
+Flask
+SQLAlchemy
+PyMySQL
+python-dotenv
+openai
+pinecone
+pytest

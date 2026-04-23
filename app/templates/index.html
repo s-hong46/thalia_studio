@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Talkshow Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo-dot"></div>
+        <div>
+          <div class="brand-title">Talkshow Studio</div>
+          <div class="brand-subtitle">Craft a set with real-time signals</div>
+        </div>
+      </div>
+      <div class="topbar-controls">
+        <label class="field">
+          <span>Nickname</span>
+          <input id="nicknameInput" type="text" placeholder="e.g. Alex" />
+        </label>
+        <div class="drafts">
+          <label class="field">
+            <span>Drafts</span>
+            <select id="draftSelect"></select>
+          </label>
+          <button id="newDraftBtn" class="btn">New Draft</button>
+          <button id="renameDraftBtn" class="btn ghost-btn">Rename</button>
+          <button id="archiveDraftBtn" class="btn ghost-btn">Archive</button>
+          <a class="btn ghost-btn" href="/performances">Performances</a>
+        </div>
+      </div>
+    </header>
+    <div id="errorBanner" class="banner hidden"></div>
+
+    <div id="renameModal" class="modal hidden">
+      <div class="modal-card">
+        <h3>Rename Draft</h3>
+        <input id="renameInput" type="text" placeholder="New title" />
+        <div class="modal-actions">
+          <button id="renameCancelBtn" class="btn ghost-btn">Cancel</button>
+          <button id="renameConfirmBtn" class="btn">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <main class="layout">
+      <section class="left" data-column="left">
+        <div class="panel center-panel" data-section="writing-area">
+          <div class="panel-head">
+            <h2>Writing Area</h2>
+                      </div>
+          <div class="editor-wrap">
+            <div id="bitsContainer" class="bits-list"></div>
+            <button id="addBitBtn" class="add-bit-btn btn ghost-btn" type="button">+ Add New Bit</button>
+            <div class="prepare-performance-bar">
+              <button id="preparePerformanceBtn" class="btn prepare-btn" type="button">Prepare for Performance</button>
+            </div>
+          </div>
+
+          <div id="teleprompterWrap" class="teleprompter-wrap hidden">
+            <div id="teleprompterBody" class="teleprompter-body"></div>
+            <div class="prepare-performance-bar">
+              <button id="backToEditFromTeleprompterBtn" class="btn back-to-edit-btn" type="button">&#8592; Back to Editing</button>
+            </div>
+          </div>
+
+          <div class="status-row">
+            <div class="status-actions">
+              <span id="saveStatus">Autosave: idle</span>
+              <button id="saveDraftBtn" class="btn ghost-btn" type="button">Save Now</button>
+            </div>
+            <span id="contextStatus">Autosave keeps your bit structure updated</span>
+          </div>
+        </div>
+      </section>
+
+      <div id="splitter" class="splitter"></div>
+
+      <section class="center" data-column="center">
+        <div class="panel review-panel" data-section="performance-review">
+          <div class="panel-head">
+            <h2>Performance Review</h2>
+                      </div>
+
+          <div id="reviewPanelOverlay" class="review-panel-overlay">
+            <p class="review-panel-overlay-text">Please select bits and click &ldquo;Prepare for Performance&rdquo; to start.</p>
+          </div>
+
+          <div class="review-cards">
+            <div class="review-card" data-section="asr-cta">
+              <div class="review-card-head">
+                <h3 class="review-card-title">Recording Console</h3>
+              </div>
+              <div class="review-cta">
+                <button id="asrBtn" class="btn asr-primary" type="button">Start Voice Input</button>
+                <div class="asr-meta">
+                  <span id="asrStatus">Mic: idle</span>
+                  <span class="asr-hint">Listen for emotion, pacing, and pauses</span>
+                </div>
+              </div>
+              <div class="rehearsal-tool-row">
+                <button id="uploadRehearsalBtn" class="btn ghost-btn" type="button">Upload Take</button>
+                <input id="rehearsalAudioInput" class="hidden" type="file" accept="audio/*" />
+                <button id="analyzeRehearsalBtn" class="btn" type="button">Analyze Rehearsal</button>
+              </div>
+            </div>
+
+            <div class="review-card" data-section="rehearsal-analysis">
+              <div class="review-card-head">
+                <h3 class="review-card-title">Analysis Insights</h3>
+              </div>
+              <select id="stylePresetSelect" class="hidden"></select>
+              <input id="stylePresetInput" class="hidden" type="text" placeholder="New style preset" maxlength="60" />
+              <button id="saveStylePresetBtn" class="btn ghost-btn hidden" type="button">Save Style</button>
+              <div class="transcript-panel" data-section="performance-analysis">
+                <div class="transcript-head">
+                  <span class="transcript-label">Performance Analysis</span>
+                  <span class="transcript-legend">
+                    <span class="legend-dot legend-dot--matched"></span>Matched
+                    <span class="legend-dot legend-dot--improv"></span>Improvised
+                    <span class="legend-dot legend-dot--missed"></span>Missed
+                  </span>
+                  <button id="saveTranscriptBtn" class="btn transcript-save-btn hidden" type="button" title="Add this transcript as a new bit in your Writing Area">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1v7M2.5 5.5L6 9l3.5-3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 11h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                    Save to Writing Area
+                  </button>
+                </div>
+                <div id="transcriptView" class="transcript-view">Your recorded transcript will appear here&hellip;</div>
+              </div>
+              <div id="reviewLoader" class="review-loader hidden">
+                <div class="review-spinner"></div>
+                <div class="review-loading-text">Generating review...</div>
+              </div>
+              <div id="reviewText" class="review-text"></div>
+              <audio id="reviewAudio" class="review-audio hidden" controls></audio>
+              <audio id="evidenceAudio" class="hidden" controls></audio>
+              <audio id="demoAudio" class="hidden" controls></audio>
+              <div class="review-card-footer">
+                <div id="rehearsalStatus" class="rehearsal-status">Rehearsal: no audio selected</div>
+                <div id="videoDatasetStatus" class="video-dataset-status">Dataset: checking...</div>
+              </div>
+            </div>
+
+            <div class="review-card" data-section="focused-note">
+              <div class="review-card-head">
+                <h3 class="review-card-title">Focused Delivery Note</h3>
+                <label class="video-toggle">
+                  <input id="includeVideoRef" type="checkbox" checked />
+                  <span>Use reference video</span>
+                </label>
+              </div>
+              <div id="focusedNoteEmpty" class="focused-note-empty">Click a highlighted transcript line to inspect that delivery moment.</div>
+              <div id="focusedNoteCard" class="focused-note-card hidden">
+
+                <!-- [1] Quote Block -->
+                <div class="fdn-quote-block">
+                  <div id="focusedNoteQuote" class="focused-note-quote"></div>
+                  <div id="focusedNoteMeta" class="focused-note-meta"></div>
+                </div>
+
+                <!-- [2] Coaching Advice Callout -->
+                <div class="fdn-advice-callout">
+                  <div class="fdn-advice-icon">
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M7.5 5v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="7.5" cy="10.5" r="0.75" fill="currentColor"/></svg>
+                  </div>
+                  <div class="fdn-advice-body">
+                    <div id="focusedNoteAdvice" class="focused-note-advice"></div>
+                    <div id="focusedNoteWhy" class="focused-note-why"></div>
+                  </div>
+                </div>
+
+                <!-- [3] Bottom Split: video left, practice steps right -->
+                <div class="fdn-bottom-split">
+                  <div class="fdn-video-col">
+                    <div class="fdn-col-header">
+                      <svg class="fdn-col-icon" width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="12" height="12" rx="2.5" stroke="currentColor"/><polygon points="5,3.5 10,6.5 5,9.5" fill="currentColor"/></svg>
+                      <span class="fdn-col-label">Your Delivery &amp; Reference</span>
+                    </div>
+                    <div id="focusedNotePlayers" class="focused-note-players"></div>
+                    <div id="focusedNoteVideo" class="focused-note-video"></div>
+                  </div>
+                  <div class="fdn-steps-col">
+                    <div class="fdn-col-header">
+                      <svg class="fdn-col-icon" width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="12" height="12" rx="2.5" stroke="currentColor"/><path d="M3.5 6.5L5.5 8.5L9.5 4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      <span class="fdn-col-label">Practice Steps</span>
+                    </div>
+                    <div id="focusedNoteNext" class="focused-note-next"></div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="feedbackDrawer" class="feedback-drawer" data-column="right">
+      <div class="drawer-content">
+        <div class="panel feedback-panel" data-section="feedback-panel">
+          <div class="panel-head panel-head--stacked">
+            <h2>Feedback</h2>
+            <a id="downloadFeedbackLink" class="btn ghost-btn feedback-download hidden" href="#" download="rehearsal_feedback.txt">Download notes</a>
+          </div>
+          <div class="feedback-scroll">
+            <div id="feedbackText" class="feedback"></div>
+            <div id="antiExamples" class="chips"></div>
+          </div>
+        </div>
+
+        <div class="panel map-panel" data-section="study-videos">
+          <div class="panel-head">
+            <h2 id="processMapTitle">Who to Watch</h2>
+          </div>
+          <div class="map-wrap stage-wrap">
+            <div id="stageStatus" class="stage-status">Here are a few comedians and specific clips worth studying before your next pass.</div>
+            <ul id="videoReferenceList" class="video-reference-list"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button id="drawerHandle" class="drawer-handle" aria-label="Toggle Feedback &amp; Logs">
+      <svg class="handle-chevron" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+        <path d="M8.5 2L3.5 6.5L8.5 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="handle-label">Feedback</span>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.3/Sortable.min.js"></script>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

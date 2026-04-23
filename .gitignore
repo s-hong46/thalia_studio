@@ -1,0 +1,44 @@
+# Secrets and local env files
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.python-version
+.venv/
+venv/
+
+# Editors and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Datasets and external assets
+dataset/
+external/
+movies/
+
+# Runtime outputs
+artifacts/*
+!artifacts/.gitkeep
+pytest-cache-files-*/
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+app/static/tts/*
+!app/static/tts/.gitkeep
+app/static/rehearsal/evidence/*
+!app/static/rehearsal/evidence/.gitkeep
+app/static/rehearsal/video_preview/*
+!app/static/rehearsal/video_preview/.gitkeep

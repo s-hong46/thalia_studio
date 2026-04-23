@@ -1,0 +1,5 @@
+- Manual check: Drafts list loads after nickname set
+- Manual check: Switching drafts auto-saves current then loads new
+- Manual check: Rename modal updates title
+- Manual check: Archive removes draft from list
+- Manual check: SSE updates feedback and process map
