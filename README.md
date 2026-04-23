@@ -9,7 +9,7 @@ This repository contains the research prototype associated with our work on AI-s
 ## Overview
 
 <p align="center">
-  <img src="assets/images/teaser.png" alt="Thalia Studio teaser figure" width="950">
+  <img src="assets/images/teaser.pdf" alt="Thalia Studio teaser figure" width="950">
 </p>
 
 A bit can feel wrong during rehearsal without clearly revealing where the problem is. Thalia Studio is designed to make that moment visible and actionable. Instead of only giving broad comments on a full performance, the system localizes specific moments that may warrant coaching, explains why they matter, and supports revision through grounded comparison.
@@ -17,7 +17,7 @@ A bit can feel wrong during rehearsal without clearly revealing where the proble
 ## Interface and Workflow
 
 <p align="center">
-  <img src="assets/images/ui_overview.png" alt="Thalia Studio interface overview" width="950">
+  <img src="assets/images/UI.png" alt="Thalia Studio interface overview" width="950">
 </p>
 
 Thalia Studio supports an iterative rehearsal loop:
@@ -30,7 +30,7 @@ Thalia Studio supports an iterative rehearsal loop:
 ## Technical Pipeline
 
 <p align="center">
-  <img src="assets/images/method.png" alt="Thalia Studio technical pipeline" width="950">
+  <img src="assets/images/method.pdf" alt="Thalia Studio technical pipeline" width="950">
 </p>
 
 The system is organized around three core components:
