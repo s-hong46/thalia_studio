@@ -1,119 +1,73 @@
-# ComedyCoach
+# Thalia Studio
 
-ComedyCoach is a Flask based rehearsal workspace for stand up comedy writing and performance practice.
-It supports draft editing, recording, transcript analysis, focused delivery feedback, and optional reference video retrieval.
+Thalia Studio is a rehearsal support system for stand-up comedy. It is designed to support an iterative workflow in which performers draft a bit, record a take, inspect moment-level feedback, revise the material, and try again.
 
-This public snapshot has been cleaned for GitHub publication. Local credentials, generated media, caches, test databases, and large runtime artifacts are intentionally excluded.
+Starting from a recorded rehearsal, the system highlights locally consequential moments in delivery, provides focused feedback grounded in the user’s own performance, and, when a prepared reference dataset is available, retrieves short video examples whose performance logic may help guide revision.
 
-## What is included
+This repository contains the research prototype associated with our work on AI-supported stand-up comedy rehearsal. The project brings together writing support, rehearsal recording, performance analysis, and example-grounded revision within a single workflow.
 
-- A browser based writing and rehearsal workflow
-- Transcript alignment with matched, improvised, and missed spans
-- Focused delivery notes with practice steps
-- Optional ASR, TTS, and reference retrieval integrations through environment variables
-- Dataset ingestion utilities and backend services
-- A pytest suite for core backend behavior
+## Overview
 
-## What is not included
+<p align="center">
+  <img src="assets/images/teaser.png" alt="Thalia Studio teaser figure" width="950">
+</p>
 
-- Real API keys, tokens, or local database credentials
-- Large stand up video datasets and generated preview clips
-- Recorded rehearsal media and generated TTS outputs
-- Local caches, logs, and scratch scripts used during development
+A bit can feel wrong during rehearsal without clearly revealing where the problem is. Thalia Studio is designed to make that moment visible and actionable. Instead of only giving broad comments on a full performance, the system localizes specific moments that may warrant coaching, explains why they matter, and supports revision through grounded comparison.
 
-## Project structure
+## Interface and Workflow
 
-```text
-app/
-  routes/              Flask routes and API handlers
-  services/            Analysis, retrieval, ASR, TTS, and dataset services
-  static/              Frontend JS, CSS, and generated media folders
-  templates/           HTML templates
-scripts/               Utility scripts for setup and dataset indexing
-tests/                 Automated tests
-run.py                 Local development entrypoint
-```
+<p align="center">
+  <img src="assets/images/ui_overview.png" alt="Thalia Studio interface overview" width="950">
+</p>
 
-## Requirements
+Thalia Studio supports an iterative rehearsal loop:
 
-- Python 3.11+
-- Optional: ffmpeg / ffprobe for audio and preview generation
-- Optional: OpenAI credentials for model backed analysis, ASR, and TTS
-- Optional: Pinecone credentials for vector retrieval
-- Optional: MySQL if you do not want to use SQLite locally
+1. **Prepare for performance.** Users draft and organize material in the Writing Area.
+2. **Record and analyze.** Users record a take and inspect a color-coded transcript that highlights matched, improvised, and missed material.
+3. **Inspect moment-level feedback.** Users click a highlighted moment to view a focused delivery note, replay a local span, and study a retrieved reference example when available.
+4. **Revise and try again.** Users return to the writing area to revise wording, order, or emphasis and rehearse again.
 
-## Quick start
+## Technical Pipeline
 
-1. Create and activate a virtual environment.
-2. Install dependencies.
+<p align="center">
+  <img src="assets/images/method.png" alt="Thalia Studio technical pipeline" width="950">
+</p>
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+The system is organized around three core components:
 
-3. Create a local environment file.
+1. **Coaching target selection.** A recorded take is transcribed and segmented into short replayable spans. The system identifies moments whose local delivery may affect how the surrounding material is heard.
+2. **Learnable reference span construction.** Long stand-up videos are converted into shorter reference spans that can function as teachable examples.
+3. **Transferable example retrieval.** For each coaching target, the system retrieves a reference example whose performance logic is useful for revision.
 
-   ```bash
-   python scripts/create_local_env.py
-   ```
+## What This Repository Includes
 
-4. Edit `.env` and set the variables you want to use.
-   The example defaults to SQLite so the app can boot without a MySQL server.
+This repository contains the research prototype, including:
 
-5. Start the app.
+- the web interface for writing and rehearsal
+- the recording and transcript-based analysis flow
+- the focused feedback and reference presentation logic
+- the dataset preparation and indexing scripts used to support retrieval
 
-   ```bash
-   python run.py
-   ```
+## Important Note on Video Data
 
-6. Open `http://127.0.0.1:5000`.
+> **Important**
+> Retrieved video references depend on a locally prepared reference dataset.
+> The stand-up video corpus is **not distributed** with this repository.
+> To enable retrieval, you must obtain the source videos yourself and run the preprocessing and indexing pipeline in advance.
 
-## Configuration
+This repository does not ship the stand-up video corpus used for retrieved references. The retrieval component depends on a prebuilt local reference database rather than raw videos alone. In practice, this means that retrieval will only work after the source videos have been prepared, processed into reference spans, and indexed locally.
 
-The main environment variables are:
+If you skip dataset preparation, the writing and rehearsal parts of the application may still run depending on your local setup, but video-based reference retrieval will not be available.
 
-- `OPENAI_API_KEY`
-- `PINECONE_API_KEY`
-- `DATABASE_URL`
-- `MYSQL_URL` as a legacy fallback
-- `VIDEO_DATASET_ROOT`
-- `AUTO_VIDEO_DATASET_INGEST`
-- `DISABLE_VIDEO_DATASET_INGEST`
-- `DISABLE_REFERENCE_LLM_ENRICHMENT`
+## Preparing the Reference Dataset
 
-Example local database setting:
+To enable retrieved video examples, you must prepare the reference dataset yourself:
 
-```env
-DATABASE_URL=sqlite:///artifacts/dev.db
-```
+1. Obtain the source stand-up videos on your own.
+2. Place the videos in the expected local data directory.
+3. Run the preprocessing and indexing pipeline before launching retrieval-dependent features.
 
-## Running tests
+Depending on your setup, this may involve running ingestion, annotation, and reindexing scripts. For example:
 
 ```bash
-python -m pytest -q
-```
-
-A simple local setup is:
-
-```bash
-export DATABASE_URL='sqlite:///:memory:'
-export DISABLE_VIDEO_DATASET_INGEST='1'
-python -m pytest -q
-```
-
-On PowerShell:
-
-```powershell
-$env:DATABASE_URL='sqlite:///:memory:'
-$env:DISABLE_VIDEO_DATASET_INGEST='1'
-python -m pytest -q
-```
-
-## Notes for publishing
-
-Before pushing to a public GitHub repository, rotate any credential that may have existed in prior local copies.
-If you need a cleaner open source boundary, keep private datasets and experimental notebooks in a separate non public repository.
-
-## License
-
-This repository is released under the MIT License.
+python scripts/reindex_dataset_references.py
